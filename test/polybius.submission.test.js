@@ -1,4 +1,5 @@
-/*const { expect } = require("chai");
+/*
+const { expect } = require("chai");
 const { polybius } = require("../src/polybius");
 
 describe("polybius() submission tests written by Thinkful", () => {

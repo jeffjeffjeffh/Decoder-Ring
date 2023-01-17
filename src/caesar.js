@@ -18,56 +18,38 @@ const caesarModule = (function () {
   // It leaves non-alphabet characters alone.
   function changeValues(values, shift) {
     const newValues = values.map((value) => {
-      // Uppercase
-      if (value >= 75 && value <= 90) {
-        value += shift;
-        if (value < 75) {
-          value += 25;
-        } else if (value > 90) {
-          value -= 25;
-        }
-        // Lowercase
-      } else if (value >= 97 && value <= 122) {
+      if (value >= 97 && value <= 122) {
         value += shift;
         if (value < 97) {
-          value += 25;
+          value += 26;
         } else if (value > 122) {
-          value -= 25;
+          value -= 26;
         }
       }
+      return value;
     });
     return newValues;
   }
 
-  function translateValues(arr) {
-    const message = String.fromCharCode(...arr);
-    return message;
-  }
-
-  // This function calls all the little helper functions,
-  // and returns the final message back to caesar()
-  const changeMessage = (str, shift) => {
-    const values = getLetterValues(str);
-    const newValues = changeValues(values, shift);
-    let message = translateValues(newValues);
-  };
-
-  // "Main" function
+  // Main function
   function caesar(input, shift, encode = true) {
+    if (!shift || shift > 25 || shift < -25) return false;
     if (!encode) shift *= -1;
-    let message = changeMessage(input, shift);
-    return message;
+    const values = getLetterValues(input.toLowerCase());
+    const newValues = changeValues(values, shift);
+    let result = String.fromCharCode(...newValues);
+    return result;
   }
 
   return {
     caesar,
+    getLetterValues,
+    changeValues,
   };
 })();
 
 module.exports = {
   caesar: caesarModule.caesar,
   getLetterValues: caesarModule.getLetterValues,
-  changeMessage: caesarModule.changeMessage,
-  translateValues: caesarModule.translateValues,
   changeValues: caesarModule.changeValues,
 };
