@@ -9,7 +9,7 @@ const polybiusModule = (function () {
     ["a", "f", "l", "q", "v"],
     ["b", "g", "m", "r", "w"],
     ["c", "h", "n", "s", "x"],
-    ["d", "i/j", "o", "t", "y"],
+    ["d", "(i/j)", "o", "t", "y"],
     ["e", "k", "p", "u", "z"],
   ];
 
@@ -30,14 +30,33 @@ const polybiusModule = (function () {
     return newArr.join("");
   }
 
-  function decodeString(string) {}
+  function decodeString(string) {
+    let message = "";
+    for (let i = 0; i < string.length; i += 2) {
+      if (!string[i].match(/[0-9]/)) {
+        message = message.concat(string[i]);
+        i++;
+      }
+      const numA = Number(string[i]) - 1;
+      const numB = Number(string[i + 1]) - 1;
+      const letter = cipher[numA][numB];
+      message = message.concat(letter);
+    }
+    return message;
+  }
 
   function polybius(input, encode = true) {
     let result;
     if (encode) {
       result = encodeString(input);
     } else {
-      if (input.length % 2 != 0) return false;
+      let count = 0;
+      for (let i = 0; i < input.length; i++) {
+        if (!input[i].match(" ")) {
+          count++;
+        }
+      }
+      if (count % 2 != 0) return false;
       result = decodeString(input);
     }
     return result;
